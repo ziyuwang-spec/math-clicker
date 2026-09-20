@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Clicker</title>
+
+  <style>
+    :root {
+      --background: #171321;
+      --panel: #241d34;
+      --panel-light: #332745;
+      --gold: #f5c542;
+      --purple: #9b6cff;
+      --green: #52d273;
+      --text: #fff7df;
+      --muted: #c4bcd2;
+      --danger: #e85c6a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 18px;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, #40305a, transparent 40%),
+        var(--background);
+    }
+
+    .game {
+      width: min(1150px, 100%);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 20px;
+    }
+
+    .panel {
+      background: rgba(36, 29, 52, 0.95);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    }
+
+    .main {
+      padding: 24px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--gold);
+      text-shadow: 3px 3px 0 #7e5313;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+
+    .score {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: bold;
+      color: var(--gold);
+      margin: 10px 0 2px;
+    }
+
+    .score-label {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .rate {
+      margin: 12px 0 24px;
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    .math-button {
+      width: min(300px, 70vw);
+      height: min(300px, 70vw);
+      border: 8px solid #d69e2e;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 25%, #fff5a8, var(--gold) 40%, #b87813);
+      color: #332000;
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow:
+        inset 0 -20px 0 rgba(120, 70, 0, 0.25),
+        0 18px 25px rgba(0,0,0,0.35);
+      transition: transform 0.08s, filter 0.15s;
+      user-select: none;
+    }
+
+    .math-button:hover {
+      filter: brightness(1.08);
+    }
+
+    .math-button:active {
+      transform: scale(0.95);
+    }
+
+    .math-button.clicked {
+      animation: bounce 0.16s ease;
+    }
+
+    @keyframes bounce {
+      50% {
+        transform: scale(1.08);
+      }
+    }
+
+    .controls {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button.small-button {
+      padding: 10px 15px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 9px;
+      background: var(--panel-light);
+      color: var(--text);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button.small-button:hover {
+      background: #49365e;
+    }
+
+    .shop {
+      padding: 18px;
+    }
+
+    .shop h2 {
+      margin: 0 0 5px;
+      color: var(--gold);
+    }
+
+    .shop-description {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .building {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      background: var(--panel-light);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .building-icon {
+      width: 45px;
+      height: 45px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #1a1425;
+      font-size: 1.7rem;
+    }
+
+    .building-name {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .building-info {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .buy-button {
+      min-width: 92px;
+      padding: 9px 8px;
+      border: 0;
+      border-radius: 8px;
+      color: #17220f;
+      background: var(--green);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .buy-button:hover {
+      filter: brightness(1.1);
+    }
+
+    .buy-button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .buy-button small {
+      display: block;
+      margin-top: 3px;
+      color: #28562f;
+    }
+
+    .log {
+      margin-top: 18px;
+      padding: 12px;
+      min-height: 80px;
+      max-height: 145px;
+      overflow-y: auto;
+      border-radius: 10px;
+      background: #191425;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    .log-line {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 5px 0;
+    }
+
+    .floating-number {
+      position: fixed;
+      pointer-events: none;
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 1.3rem;
+      animation: floatUp 0.8s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-80px);
+      }
+    }
+
+    @media (max-width: 850px) {
+      .game {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game">
+    <main class="panel main">
+      <h1>Math Clicker</h1>
+      <p class="subtitle">Solve equations. Build an empire. Become a math genius.</p>
+
+      <div class="score" id="score">0</div>
+      <div class="score-label">Math Points</div>
+      <div class="rate" id="rate">0 points per second</div>
+
+      <button class="math-button" id="mathButton">+</button>
+
+      <div class="controls">
+        <button class="small-button" id="saveButton">Save Game</button>
+        <button class="small-button" id="resetButton">Reset Game</button>
+      </div>
+
+      <div class="log" id="log"></div>
+    </main>
+
+    <aside class="panel shop">
+      <h2>Math Buildings</h2>
+      <p class="shop-description">
+        Buy buildings to generate Math Points automatically.
+      </p>
+
+      <div id="buildingList"></div>
+    </aside>
+  </div>
+
+  <script>
+    const SAVE_KEY = "math-clicker-save";
+
+    const buildingTypes = {
+      abacus: {
+        name: "Abacus",
+        icon: "🧮",
+        description: "A classic counting device.",
+        baseCost: 15,
+        pointsPerSecond: 0.1
+      },
+
+      academy: {
+        name: "Addition Academy",
+        icon: "➕",
+        description: "Students solve simple sums.",
+        baseCost: 100,
+        pointsPerSecond: 1
+      },
+
+      multiplication: {
+        name: "Multiplication Mill",
+        icon: "✖️",
+        description: "Produces points in groups.",
+        baseCost: 500,
+        pointsPerSecond: 8
+      },
+
+      geometry: {
+        name: "Geometry Lab",
+        icon: "📐",
+        description: "Measures shapes and angles.",
+        baseCost: 2500,
+        pointsPerSecond: 47
+      },
+
+      calculus: {
+        name: "Calculus Core",
+        icon: "∫",
+        description: "Harnesses infinite change.",
+        baseCost: 12000,
+        pointsPerSecond: 260
+      },
+
+      probability: {
+        name: "Probability Engine",
+        icon: "🎲",
+        description: "Calculates every possible outcome.",
+        baseCost: 60000,
+        pointsPerSecond: 1400
+      },
+
+      computer: {
+        name: "Mathematical Supercomputer",
+        icon: "💻",
+        description: "Solves impossible equations.",
+        baseCost: 300000,
+        pointsPerSecond: 8000
+      }
+    };
+
+    function createNewGame() {
+      return {
+        points: 0,
+        clickPower: 1,
+        totalClicks: 0,
+        buildings: {
+          abacus: 0,
+          academy: 0,
+          multiplication: 0,
+          geometry: 0,
+          calculus: 0,
+          probability: 0,
+          computer: 0
+        }
+      };
+    }
+
+    let game = loadGame();
+
+    function loadGame() {
+      const savedGame = localStorage.getItem(SAVE_KEY);
+
+      if (!savedGame) {
+        return createNewGame();
+      }
+
+      try {
+        const saved = JSON.parse(savedGame);
+        const fresh = createNewGame();
+
+        return {
+          ...fresh,
+          ...saved,
+          buildings: {
+            ...fresh.buildings,
+            ...(saved.buildings || {})
+          }
+        };
+      } catch {
+        return createNewGame();
+      }
+    }
+
+    function saveGame(showMessage = true) {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(game));
+
+      if (showMessage) {
+        addLog("Game saved.");
+      }
+    }
+
+    function formatNumber(number) {
+      if (number >= 1_000_000_000) {
+        return (number / 1_000_000_000).toFixed(2) + "B";
+      }
+
+      if (number >= 1_000_000) {
+        return (number / 1_000_000).toFixed(2) + "M";
+      }
+
+      if (number >= 1_000) {
+        return (number / 1_000).toFixed(2) + "K";
+      }
+
+      if (Number.isInteger(number)) {
+        return number.toString();
+      }
+
+      return number.toFixed(1);
+    }
+
+    function getBuildingCost(type) {
+      const building = buildingTypes[type];
+      const amountOwned = game.buildings[type];
+
+      // Each building becomes 15% more expensive after every purchase.
+      return Math.floor(building.baseCost * Math.pow(1.15, amountOwned));
+    }
+
+    function getPointsPerSecond() {
+      let total = 0;
+
+      for (const [type, building] of Object.entries(buildingTypes)) {
+        total += game.buildings[type] * building.pointsPerSecond;
+      }
+
+      return total;
+    }
+
+    function addLog(message) {
+      const log = document.getElementById("log");
+      const line = document.createElement("div");
+
+      line.className = "log-line";
+      line.textContent = message;
+
+      log.prepend(line);
+
+      while (log.children.length > 8) {
+        log.removeChild(log.lastChild);
+      }
+    }
+
+    function updateScreen() {
+      const score = document.getElementById("score");
+      const rate = document.getElementById("rate");
+      const buildingList = document.getElementById("buildingList");
+
+      score.textContent = formatNumber(game.points);
+      rate.textContent =
+        formatNumber(getPointsPerSecond()) + " points per second";
+
+      buildingList.innerHTML = "";
+
+      for (const [type, building] of Object.entries(buildingTypes)) {
+        const owned = game.buildings[type];
+        const cost = getBuildingCost(type);
+        const canBuy = game.points >= cost;
+
+        const element = document.createElement("div");
+        element.className = "building";
+
+        element.innerHTML = `
+          <div class="building-icon">${building.icon}</div>
+
+          <div>
+            <div class="building-name">${building.name}</div>
+            <div class="building-info">
+              ${building.description}<br>
+              Owned: ${owned} · +${formatNumber(building.pointsPerSecond)}/sec
+            </div>
+          </div>
+
+          <button class="buy-button" data-type="${type}" ${canBuy ? "" : "disabled"}>
+            Buy
+            <small>${formatNumber(cost)}</small>
+          </button>
+        `;
+
+        buildingList.appendChild(element);
+      }
+
+      document.querySelectorAll(".buy-button").forEach(button => {
+        button.addEventListener("click", () => {
+          buyBuilding(button.dataset.type);
+        });
+      });
+    }
+
+    function clickMathButton() {
+      game.points += game.clickPower;
+      game.totalClicks++;
+
+      const button = document.getElementById("mathButton");
+      button.classList.remove("clicked");
+      void button.offsetWidth;
+      button.classList.add("clicked");
+
+      showFloatingNumber("+" + formatNumber(game.clickPower));
+      updateScreen();
+    }
+
+    function buyBuilding(type) {
+      const building = buildingTypes[type];
+      const cost = getBuildingCost(type);
+
+      if (game.points < cost) {
+        return;
+      }
+
+      game.points -= cost;
+      game.buildings[type]++;
+
+      addLog(
+        `Bought ${building.name}! It now produces ${formatNumber(
+          building.pointsPerSecond
+        )} points per second.`
+      );
+
+      saveGame(false);
+      updateScreen();
+    }
+
+    function showFloatingNumber(text) {
+      const floating = document.createElement("div");
+
+      floating.className = "floating-number";
+      floating.textContent = text;
+      floating.style.left = Math.random() * 70 + 15 + "vw";
+      floating.style.top = Math.random() * 35 + 35 + "vh";
+
+      document.body.appendChild(floating);
+
+      setTimeout(() => {
+        floating.remove();
+      }, 800);
+    }
+
+    function resetGame() {
+      const confirmed = confirm(
+        "Are you sure you want to erase all of your math progress?"
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      game = createNewGame();
+      localStorage.removeItem(SAVE_KEY);
+
+      addLog("Game reset.");
+      updateScreen();
+    }
+
+    document
+      .getElementById("mathButton")
+      .addEventListener("click", clickMathButton);
+
+    document
+      .getElementById("saveButton")
+      .addEventListener("click", () => saveGame(true));
+
+    document
+      .getElementById("resetButton")
+      .addEventListener("click", resetGame);
+
+    // Runs ten times per second for smooth automatic income.
+    setInterval(() => {
+      game.points += getPointsPerSecond() / 10;
+      updateScreen();
+    }, 100);
+
+    // Automatically save every 10 seconds.
+    setInterval(() => {
+      saveGame(false);
+    }, 10000);
+
+    addLog("Welcome to Math Clicker!");
+    addLog("Click the plus button to earn Math Points.");
+    updateScreen();
+  </script>
+</body>
+</html>
