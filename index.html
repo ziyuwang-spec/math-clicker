@@ -3,21 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Math Clicker</title>
+  <title>Math Empire</title>
 
   <style>
-    :root {
-      --background: #171321;
-      --panel: #241d34;
-      --panel-light: #332745;
-      --gold: #f5c542;
-      --purple: #9b6cff;
-      --green: #52d273;
-      --text: #fff7df;
-      --muted: #c4bcd2;
-      --danger: #e85c6a;
-    }
-
     * {
       box-sizing: border-box;
     }
@@ -25,12 +13,10 @@
     body {
       margin: 0;
       min-height: 100vh;
-      padding: 18px;
+      padding: 20px;
       font-family: Arial, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top, #40305a, transparent 40%),
-        var(--background);
+      color: white;
+      background: radial-gradient(circle at top, #493468, #181321 55%, #0d0b12);
     }
 
     .game {
@@ -42,63 +28,72 @@
     }
 
     .panel {
-      background: rgba(36, 29, 52, 0.95);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-    }
-
-    .main {
-      padding: 24px;
-      text-align: center;
+      background: rgba(35, 27, 53, 0.96);
+      border: 1px solid #67527f;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 16px 40px #0008;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      color: var(--gold);
-      text-shadow: 3px 3px 0 #7e5313;
+      margin: 0 0 20px;
+      text-align: center;
+      color: #facc15;
+      font-size: clamp(2.3rem, 6vw, 4rem);
+      text-shadow: 3px 3px #725000;
     }
 
-    .subtitle {
-      color: var(--muted);
-      margin: 0 0 22px;
+    h2 {
+      margin-top: 0;
+      color: #facc15;
     }
 
-    .score {
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      font-weight: bold;
-      color: var(--gold);
-      margin: 10px 0 2px;
+    .stats {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
     }
 
-    .score-label {
-      color: var(--muted);
-      font-size: 1rem;
+    .stat {
+      min-width: 125px;
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ffffff18;
+      border-radius: 12px;
+      background: #ffffff0b;
     }
 
-    .rate {
-      margin: 12px 0 24px;
-      color: var(--green);
+    .stat-label {
+      display: block;
+      color: #c9bfdc;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      display: block;
+      margin-top: 5px;
+      color: white;
+      font-size: 1.5rem;
       font-weight: bold;
     }
 
     .math-button {
-      width: min(300px, 70vw);
-      height: min(300px, 70vw);
-      border: 8px solid #d69e2e;
+      display: block;
+      width: min(290px, 70vw);
+      aspect-ratio: 1;
+      margin: auto;
+      border: 8px solid #bd8618;
       border-radius: 50%;
-      background:
-        radial-gradient(circle at 35% 25%, #fff5a8, var(--gold) 40%, #b87813);
-      color: #332000;
-      font-size: clamp(3rem, 10vw, 6rem);
+      color: #3a2700;
+      background: radial-gradient(circle at 35% 25%, #fff4a3, #facc15 45%, #b77908);
+      box-shadow: inset 0 -18px 20px #744b0038, 0 18px 25px #0008;
+      font-size: 6rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow:
-        inset 0 -20px 0 rgba(120, 70, 0, 0.25),
-        0 18px 25px rgba(0,0,0,0.35);
-      transition: transform 0.08s, filter 0.15s;
-      user-select: none;
+      transition: transform 0.1s;
     }
 
     .math-button:hover {
@@ -106,140 +101,179 @@
     }
 
     .math-button:active {
-      transform: scale(0.95);
+      transform: scale(0.94);
     }
 
-    .math-button.clicked {
-      animation: bounce 0.16s ease;
-    }
-
-    @keyframes bounce {
-      50% {
-        transform: scale(1.08);
-      }
-    }
-
-    .controls {
-      margin-top: 28px;
+    .name-area,
+    .button-row {
       display: flex;
       justify-content: center;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 8px;
     }
 
-    button.small-button {
-      padding: 10px 15px;
-      border: 1px solid rgba(255,255,255,0.18);
+    .name-area {
+      margin-top: 25px;
+    }
+
+    input {
+      width: 230px;
+      padding: 11px;
+      border: 1px solid #ffffff33;
       border-radius: 9px;
-      background: var(--panel-light);
-      color: var(--text);
-      cursor: pointer;
-      font-weight: bold;
+      color: white;
+      background: #ffffff0d;
+      font-size: 1rem;
     }
 
-    button.small-button:hover {
-      background: #49365e;
+    input::placeholder {
+      color: #c9bfdc;
     }
 
-    .shop {
-      padding: 18px;
-    }
-
-    .shop h2 {
-      margin: 0 0 5px;
-      color: var(--gold);
-    }
-
-    .shop-description {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-top: 0;
-      margin-bottom: 16px;
-    }
-
-    .building {
-      display: grid;
-      grid-template-columns: 52px 1fr auto;
-      gap: 10px;
-      align-items: center;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 12px;
-      background: var(--panel-light);
-      border: 1px solid rgba(255,255,255,0.09);
-    }
-
-    .building-icon {
-      width: 45px;
-      height: 45px;
-      display: grid;
-      place-items: center;
-      border-radius: 10px;
-      background: #1a1425;
-      font-size: 1.7rem;
-    }
-
-    .building-name {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
-
-    .building-info {
-      color: var(--muted);
-      font-size: 0.78rem;
-      line-height: 1.35;
-    }
-
-    .buy-button {
-      min-width: 92px;
-      padding: 9px 8px;
+    button {
+      padding: 10px 14px;
       border: 0;
-      border-radius: 8px;
-      color: #17220f;
-      background: var(--green);
-      cursor: pointer;
+      border-radius: 9px;
       font-weight: bold;
+      cursor: pointer;
     }
 
-    .buy-button:hover {
-      filter: brightness(1.1);
+    button:hover {
+      filter: brightness(1.08);
     }
 
-    .buy-button:disabled {
+    button:disabled {
       opacity: 0.4;
       cursor: not-allowed;
     }
 
-    .buy-button small {
-      display: block;
-      margin-top: 3px;
-      color: #28562f;
+    .green {
+      color: #102417;
+      background: #35d17c;
+    }
+
+    .purple {
+      color: white;
+      background: #8b5cf6;
+    }
+
+    .red {
+      color: white;
+      background: #ef6675;
+    }
+
+    .button-row {
+      margin-top: 12px;
+    }
+
+    .status {
+      margin-top: 14px;
+      color: #c9bfdc;
+      font-size: 0.8rem;
+      text-align: center;
     }
 
     .log {
-      margin-top: 18px;
-      padding: 12px;
-      min-height: 80px;
-      max-height: 145px;
+      min-height: 90px;
+      max-height: 150px;
       overflow-y: auto;
+      margin-top: 18px;
+      padding: 10px;
       border-radius: 10px;
-      background: #191425;
-      color: var(--muted);
-      font-size: 0.82rem;
-      text-align: left;
+      color: #c9bfdc;
+      background: #100d17aa;
+      font-size: 0.85rem;
     }
 
-    .log-line {
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+    .log div {
       padding: 5px 0;
+      border-bottom: 1px solid #ffffff12;
     }
 
-    .floating-number {
-      position: fixed;
-      pointer-events: none;
-      color: var(--gold);
+    .building {
+      display: grid;
+      grid-template-columns: 45px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ffffff14;
+      border-radius: 11px;
+      background: #ffffff0b;
+    }
+
+    .icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border-radius: 10px;
+      background: #8b5cf622;
+      font-size: 1.6rem;
+    }
+
+    .building-name {
       font-weight: bold;
+    }
+
+    .building-info {
+      margin-top: 4px;
+      color: #c9bfdc;
+      font-size: 0.76rem;
+      line-height: 1.35;
+    }
+
+    .buy {
+      min-width: 78px;
+      color: #102417;
+      background: #35d17c;
+    }
+
+    .buy small {
+      display: block;
+      margin-top: 3px;
+    }
+
+    .leaderboard {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .leaderboard li {
+      display: grid;
+      grid-template-columns: 35px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 7px;
+      padding: 9px;
+      border-radius: 9px;
+      background: #ffffff0a;
+    }
+
+    .rank {
+      color: #facc15;
+      font-weight: bold;
+    }
+
+    .leader-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .leader-score {
+      color: #35d17c;
+      font-weight: bold;
+    }
+
+    .floating {
+      position: fixed;
+      z-index: 5;
+      pointer-events: none;
+      color: #facc15;
       font-size: 1.3rem;
+      font-weight: bold;
       animation: floatUp 0.8s ease-out forwards;
     }
 
@@ -251,7 +285,7 @@
 
       to {
         opacity: 0;
-        transform: translateY(-80px);
+        transform: translateY(-70px);
       }
     }
 
@@ -265,335 +299,521 @@
 
 <body>
   <div class="game">
-    <main class="panel main">
-      <h1>Math Clicker</h1>
-      <p class="subtitle">Solve equations. Build an empire. Become a math genius.</p>
+    <main class="panel">
+      <h1>Math Empire</h1>
 
-      <div class="score" id="score">0</div>
-      <div class="score-label">Math Points</div>
-      <div class="rate" id="rate">0 points per second</div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">Math Points</span>
+          <span class="stat-value" id="points">0</span>
+        </div>
 
-      <button class="math-button" id="mathButton">+</button>
+        <div class="stat">
+          <span class="stat-label">Per Click</span>
+          <span class="stat-value" id="perClick">1</span>
+        </div>
 
-      <div class="controls">
-        <button class="small-button" id="saveButton">Save Game</button>
-        <button class="small-button" id="resetButton">Reset Game</button>
+        <div class="stat">
+          <span class="stat-label">Per Second</span>
+          <span class="stat-value" id="perSecond">0</span>
+        </div>
       </div>
 
+      <button class="math-button" id="clickButton">+</button>
+
+      <div class="name-area">
+        <input id="nameInput" maxlength="18" placeholder="Enter your name">
+        <button class="purple" id="nameButton">Change Name</button>
+      </div>
+
+      <div class="button-row">
+        <button class="green" id="saveButton">Save Score Online</button>
+        <button class="red" id="resetButton">Reset Game</button>
+      </div>
+
+      <div class="status" id="status">Connecting...</div>
       <div class="log" id="log"></div>
     </main>
 
-    <aside class="panel shop">
+    <aside class="panel">
       <h2>Math Buildings</h2>
-      <p class="shop-description">
-        Buy buildings to generate Math Points automatically.
-      </p>
+      <div id="buildings"></div>
 
-      <div id="buildingList"></div>
+      <h2>Global Ranking</h2>
+      <ol class="leaderboard" id="leaderboard">
+        <li>Loading scores...</li>
+      </ol>
     </aside>
   </div>
 
-  <script>
-    const SAVE_KEY = "math-clicker-save";
+  <script type="module">
+    import { createClient }
+      from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    /*
+      REPLACE THESE TWO VALUES.
+    */
+
+    const SUPABASE_URL = "PASTE_YOUR_API_URL_HERE";
+
+    const SUPABASE_ANON_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+    const supabase = createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const SAVE_KEY = "math-empire-local-save";
+    const PLAYER_ID_KEY = "math-empire-player-id";
 
     const buildingTypes = {
       abacus: {
         name: "Abacus",
         icon: "🧮",
-        description: "A classic counting device.",
+        description: "Counts numbers automatically.",
         baseCost: 15,
-        pointsPerSecond: 0.1
+        income: 0.1,
+        clickBonus: 1
       },
 
-      academy: {
+      addition: {
         name: "Addition Academy",
         icon: "➕",
-        description: "Students solve simple sums.",
+        description: "Students solve addition problems.",
         baseCost: 100,
-        pointsPerSecond: 1
+        income: 1,
+        clickBonus: 4
       },
 
       multiplication: {
         name: "Multiplication Mill",
         icon: "✖️",
-        description: "Produces points in groups.",
+        description: "Produces multiplication points.",
         baseCost: 500,
-        pointsPerSecond: 8
+        income: 8,
+        clickBonus: 12
       },
 
       geometry: {
         name: "Geometry Lab",
         icon: "📐",
-        description: "Measures shapes and angles.",
+        description: "Studies shapes and angles.",
         baseCost: 2500,
-        pointsPerSecond: 47
+        income: 47,
+        clickBonus: 35
       },
 
       calculus: {
         name: "Calculus Core",
         icon: "∫",
-        description: "Harnesses infinite change.",
+        description: "Calculates infinite change.",
         baseCost: 12000,
-        pointsPerSecond: 260
+        income: 260,
+        clickBonus: 120
       },
 
       probability: {
         name: "Probability Engine",
         icon: "🎲",
-        description: "Calculates every possible outcome.",
+        description: "Predicts possible outcomes.",
         baseCost: 60000,
-        pointsPerSecond: 1400
+        income: 1400,
+        clickBonus: 420
       },
 
-      computer: {
-        name: "Mathematical Supercomputer",
+      supercomputer: {
+        name: "Math Supercomputer",
         icon: "💻",
         description: "Solves impossible equations.",
         baseCost: 300000,
-        pointsPerSecond: 8000
+        income: 8000,
+        clickBonus: 1700
       }
     };
 
-    function createNewGame() {
+    function newGame() {
       return {
         points: 0,
-        clickPower: 1,
-        totalClicks: 0,
-        buildings: {
+        perClick: 1,
+        clicks: 0,
+        name: "",
+        owned: {
           abacus: 0,
-          academy: 0,
+          addition: 0,
           multiplication: 0,
           geometry: 0,
           calculus: 0,
           probability: 0,
-          computer: 0
+          supercomputer: 0
         }
       };
     }
 
-    let game = loadGame();
-
     function loadGame() {
-      const savedGame = localStorage.getItem(SAVE_KEY);
+      const saved = localStorage.getItem(SAVE_KEY);
 
-      if (!savedGame) {
-        return createNewGame();
+      if (!saved) {
+        return newGame();
       }
 
       try {
-        const saved = JSON.parse(savedGame);
-        const fresh = createNewGame();
+        const parsed = JSON.parse(saved);
+        const fresh = newGame();
 
         return {
           ...fresh,
-          ...saved,
-          buildings: {
-            ...fresh.buildings,
-            ...(saved.buildings || {})
+          ...parsed,
+          owned: {
+            ...fresh.owned,
+            ...(parsed.owned || {})
           }
         };
       } catch {
-        return createNewGame();
+        return newGame();
       }
     }
 
-    function saveGame(showMessage = true) {
+    let game = loadGame();
+
+    const pointsElement = document.getElementById("points");
+    const perClickElement = document.getElementById("perClick");
+    const perSecondElement = document.getElementById("perSecond");
+    const buildingsElement = document.getElementById("buildings");
+    const leaderboardElement = document.getElementById("leaderboard");
+    const nameInput = document.getElementById("nameInput");
+    const logElement = document.getElementById("log");
+    const statusElement = document.getElementById("status");
+    const clickButton = document.getElementById("clickButton");
+
+    nameInput.value = game.name;
+
+    function getPlayerId() {
+      let id = localStorage.getItem(PLAYER_ID_KEY);
+
+      if (!id) {
+        id =
+          "player-" +
+          Date.now() +
+          "-" +
+          Math.random().toString(36).slice(2);
+
+        localStorage.setItem(PLAYER_ID_KEY, id);
+      }
+
+      return id;
+    }
+
+    const playerId = getPlayerId();
+
+    function formatNumber(value) {
+      if (!Number.isFinite(value)) return "0";
+      if (value >= 1000000000) return (value / 1000000000).toFixed(2) + "B";
+      if (value >= 1000000) return (value / 1000000).toFixed(2) + "M";
+      if (value >= 1000) return (value / 1000).toFixed(2) + "K";
+      if (Number.isInteger(value)) return String(value);
+      return value.toFixed(1);
+    }
+
+    function saveLocal() {
+      game.name = nameInput.value.trim().slice(0, 18);
       localStorage.setItem(SAVE_KEY, JSON.stringify(game));
-
-      if (showMessage) {
-        addLog("Game saved.");
-      }
-    }
-
-    function formatNumber(number) {
-      if (number >= 1_000_000_000) {
-        return (number / 1_000_000_000).toFixed(2) + "B";
-      }
-
-      if (number >= 1_000_000) {
-        return (number / 1_000_000).toFixed(2) + "M";
-      }
-
-      if (number >= 1_000) {
-        return (number / 1_000).toFixed(2) + "K";
-      }
-
-      if (Number.isInteger(number)) {
-        return number.toString();
-      }
-
-      return number.toFixed(1);
     }
 
     function getBuildingCost(type) {
       const building = buildingTypes[type];
-      const amountOwned = game.buildings[type];
-
-      // Each building becomes 15% more expensive after every purchase.
-      return Math.floor(building.baseCost * Math.pow(1.15, amountOwned));
+      return Math.floor(
+        building.baseCost * Math.pow(1.15, game.owned[type])
+      );
     }
 
     function getPointsPerSecond() {
       let total = 0;
 
-      for (const [type, building] of Object.entries(buildingTypes)) {
-        total += game.buildings[type] * building.pointsPerSecond;
+      for (const type in buildingTypes) {
+        total += game.owned[type] * buildingTypes[type].income;
       }
 
       return total;
     }
 
     function addLog(message) {
-      const log = document.getElementById("log");
       const line = document.createElement("div");
-
-      line.className = "log-line";
       line.textContent = message;
+      logElement.prepend(line);
 
-      log.prepend(line);
-
-      while (log.children.length > 8) {
-        log.removeChild(log.lastChild);
+      while (logElement.children.length > 8) {
+        logElement.lastElementChild.remove();
       }
     }
 
     function updateScreen() {
-      const score = document.getElementById("score");
-      const rate = document.getElementById("rate");
-      const buildingList = document.getElementById("buildingList");
+      pointsElement.textContent = formatNumber(game.points);
+      perClickElement.textContent = formatNumber(game.perClick);
+      perSecondElement.textContent =
+        formatNumber(getPointsPerSecond());
 
-      score.textContent = formatNumber(game.points);
-      rate.textContent =
-        formatNumber(getPointsPerSecond()) + " points per second";
+      buildingsElement.innerHTML = "";
 
-      buildingList.innerHTML = "";
-
-      for (const [type, building] of Object.entries(buildingTypes)) {
-        const owned = game.buildings[type];
+      for (const type in buildingTypes) {
+        const building = buildingTypes[type];
         const cost = getBuildingCost(type);
-        const canBuy = game.points >= cost;
+        const owned = game.owned[type];
 
-        const element = document.createElement("div");
-        element.className = "building";
+        const row = document.createElement("div");
+        row.className = "building";
 
-        element.innerHTML = `
-          <div class="building-icon">${building.icon}</div>
+        row.innerHTML = `
+          <div class="icon">${building.icon}</div>
 
           <div>
-            <div class="building-name">${building.name}</div>
+            <div class="building-name">
+              ${building.name} (${owned})
+            </div>
+
             <div class="building-info">
               ${building.description}<br>
-              Owned: ${owned} · +${formatNumber(building.pointsPerSecond)}/sec
+              +${formatNumber(building.income)} points per second
             </div>
           </div>
 
-          <button class="buy-button" data-type="${type}" ${canBuy ? "" : "disabled"}>
+          <button
+            class="buy"
+            data-type="${type}"
+            ${game.points < cost ? "disabled" : ""}
+          >
             Buy
             <small>${formatNumber(cost)}</small>
           </button>
         `;
 
-        buildingList.appendChild(element);
+        buildingsElement.appendChild(row);
       }
 
-      document.querySelectorAll(".buy-button").forEach(button => {
+      document.querySelectorAll(".buy").forEach(button => {
         button.addEventListener("click", () => {
           buyBuilding(button.dataset.type);
         });
       });
     }
 
-    function clickMathButton() {
-      game.points += game.clickPower;
-      game.totalClicks++;
+    function showFloatingNumber(value) {
+      const floating = document.createElement("div");
+      const rectangle = clickButton.getBoundingClientRect();
 
-      const button = document.getElementById("mathButton");
-      button.classList.remove("clicked");
-      void button.offsetWidth;
-      button.classList.add("clicked");
+      floating.className = "floating";
+      floating.textContent = "+" + formatNumber(value);
+      floating.style.left =
+        rectangle.left + rectangle.width / 2 + "px";
+      floating.style.top =
+        rectangle.top + rectangle.height / 2 + "px";
 
-      showFloatingNumber("+" + formatNumber(game.clickPower));
+      document.body.appendChild(floating);
+
+      setTimeout(() => floating.remove(), 800);
+    }
+
+    function clickMath() {
+      game.points += game.perClick;
+      game.clicks++;
+
+      showFloatingNumber(game.perClick);
       updateScreen();
+      saveLocal();
     }
 
     function buyBuilding(type) {
       const building = buildingTypes[type];
       const cost = getBuildingCost(type);
 
-      if (game.points < cost) {
-        return;
-      }
+      if (game.points < cost) return;
 
       game.points -= cost;
-      game.buildings[type]++;
+      game.owned[type]++;
+      game.perClick += building.clickBonus;
 
-      addLog(
-        `Bought ${building.name}! It now produces ${formatNumber(
-          building.pointsPerSecond
-        )} points per second.`
-      );
-
-      saveGame(false);
+      addLog("Bought " + building.name + "!");
       updateScreen();
+      saveLocal();
     }
 
-    function showFloatingNumber(text) {
-      const floating = document.createElement("div");
+    function checkNameCheat() {
+      const name = nameInput.value.trim().toLowerCase();
 
-      floating.className = "floating-number";
-      floating.textContent = text;
-      floating.style.left = Math.random() * 70 + 15 + "vw";
-      floating.style.top = Math.random() * 35 + 35 + "vh";
+      if (name === "math wizard") {
+        game.perClick = 100;
+        addLog("Math Wizard cheat activated!");
+      }
 
-      document.body.appendChild(floating);
+      if (name === "einstein") {
+        game.perClick = 1000;
+        addLog("Einstein cheat activated!");
+      }
 
-      setTimeout(() => {
-        floating.remove();
-      }, 800);
+      if (name === "calculator") {
+        game.points += 10000;
+        addLog("+10,000 Math Points!");
+      }
+
+      if (name === "infinity") {
+        game.points += 1000000;
+        addLog("+1,000,000 Math Points!");
+      }
+
+      if (name === "resetcheat") {
+        game.perClick = 1;
+        addLog("Cheats removed.");
+      }
     }
 
-    function resetGame() {
-      const confirmed = confirm(
-        "Are you sure you want to erase all of your math progress?"
-      );
+    async function saveScoreOnline() {
+      const name = nameInput.value.trim() || "Player";
 
-      if (!confirmed) {
+      game.name = name.slice(0, 18);
+      saveLocal();
+
+      statusElement.textContent = "Saving online...";
+
+      const { error } = await supabase
+        .from("leaderboard")
+        .upsert({
+          player_id: playerId,
+          player_name: game.name,
+          score: Math.floor(game.points),
+          clicks: game.clicks,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: "player_id"
+        });
+
+      if (error) {
+        console.error(error);
+        statusElement.textContent = "Online save failed";
+        addLog("Could not save online.");
         return;
       }
 
-      game = createNewGame();
-      localStorage.removeItem(SAVE_KEY);
-
-      addLog("Game reset.");
-      updateScreen();
+      statusElement.textContent = "Score saved online";
+      addLog("Your score was saved online.");
+      await loadLeaderboard();
     }
 
+    async function loadLeaderboard() {
+      const { data, error } = await supabase
+        .from("leaderboard")
+        .select("player_id, player_name, score, clicks")
+        .order("score", { ascending: false })
+        .limit(20);
+
+      if (error) {
+        console.error(error);
+        statusElement.textContent = "Leaderboard connection failed";
+        leaderboardElement.innerHTML =
+          "<li>Could not load leaderboard.</li>";
+        return;
+      }
+
+      statusElement.textContent = "Leaderboard connected";
+      leaderboardElement.innerHTML = "";
+
+      if (!data || data.length === 0) {
+        leaderboardElement.innerHTML = "<li>No scores yet.</li>";
+        return;
+      }
+
+      data.forEach((player, index) => {
+        const row = document.createElement("li");
+
+        const rank = document.createElement("span");
+        rank.className = "rank";
+        rank.textContent = "#" + (index + 1);
+
+        const name = document.createElement("span");
+        name.className = "leader-name";
+        name.textContent = player.player_name || "Player";
+
+        const score = document.createElement("span");
+        score.className = "leader-score";
+        score.textContent = formatNumber(player.score);
+
+        row.append(rank, name, score);
+        leaderboardElement.appendChild(row);
+      });
+    }
+
+    function subscribeToLeaderboard() {
+      supabase
+        .channel("leaderboard-changes")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "leaderboard"
+          },
+          () => {
+            loadLeaderboard();
+          }
+        )
+        .subscribe();
+    }
+
+    clickButton.addEventListener("click", clickMath);
+
     document
-      .getElementById("mathButton")
-      .addEventListener("click", clickMathButton);
+      .getElementById("nameButton")
+      .addEventListener("click", async () => {
+        const name = nameInput.value.trim();
+
+        if (name.length < 2) {
+          addLog("Your name needs at least 2 characters.");
+          return;
+        }
+
+        game.name = name.slice(0, 18);
+        nameInput.value = game.name;
+
+        checkNameCheat();
+        saveLocal();
+        updateScreen();
+
+        addLog("Your name is now " + game.name + ".");
+        await saveScoreOnline();
+      });
 
     document
       .getElementById("saveButton")
-      .addEventListener("click", () => saveGame(true));
+      .addEventListener("click", saveScoreOnline);
 
     document
       .getElementById("resetButton")
-      .addEventListener("click", resetGame);
+      .addEventListener("click", () => {
+        if (!confirm("Reset your entire game?")) return;
 
-    // Runs ten times per second for smooth automatic income.
+        game = newGame();
+        nameInput.value = "";
+        saveLocal();
+        updateScreen();
+        addLog("Game reset.");
+      });
+
     setInterval(() => {
-      game.points += getPointsPerSecond() / 10;
-      updateScreen();
+      const income = getPointsPerSecond();
+
+      if (income > 0) {
+        game.points += income / 10;
+        updateScreen();
+      }
+
+      saveLocal();
     }, 100);
 
-    // Automatically save every 10 seconds.
-    setInterval(() => {
-      saveGame(false);
-    }, 10000);
+    addLog("Welcome to Math Empire!");
+    addLog("Click the plus button to earn points.");
+    addLog("Buy buildings to earn points automatically.");
 
-    addLog("Welcome to Math Clicker!");
-    addLog("Click the plus button to earn Math Points.");
     updateScreen();
+    loadLeaderboard();
+    subscribeToLeaderboard();
   </script>
 </body>
 </html>
